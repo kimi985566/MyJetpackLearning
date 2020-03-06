@@ -1,0 +1,4 @@
+rootProject.name='MyJetpackLearning'
+include ':app'
+include ':libnavannotation'
+include ':libnavcompiler'
