@@ -12,7 +12,7 @@ import cn.yangchengyu.libnavannotation.FragmentDestination
 import cn.yangchengyu.myjetpacklearning.R
 
 
-@FragmentDestination(pageUrl = "main/tab/dash", asStarter = false)
+@FragmentDestination(pageUrl = "main/tabs/find", asStarter = false)
 class DashboardFragment : Fragment() {
 
     private lateinit var dashboardViewModel: DashboardViewModel

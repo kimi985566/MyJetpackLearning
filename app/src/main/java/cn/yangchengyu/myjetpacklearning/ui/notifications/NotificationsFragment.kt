@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModelProviders
 import cn.yangchengyu.libnavannotation.FragmentDestination
 import cn.yangchengyu.myjetpacklearning.R
 
-@FragmentDestination(pageUrl = "main/tab/notification", asStarter = false)
+@FragmentDestination(pageUrl = "main/tabs/sofa", asStarter = false)
 class NotificationsFragment : Fragment() {
 
     private lateinit var notificationsViewModel: NotificationsViewModel

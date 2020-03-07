@@ -12,7 +12,7 @@ import cn.yangchengyu.libnavannotation.FragmentDestination
 import cn.yangchengyu.myjetpacklearning.R
 
 
-@FragmentDestination(pageUrl = "main/tab/home", asStarter = true)
+@FragmentDestination(pageUrl = "main/tabs/home", asStarter = true)
 class HomeFragment : Fragment() {
 
     private lateinit var homeViewModel: HomeViewModel

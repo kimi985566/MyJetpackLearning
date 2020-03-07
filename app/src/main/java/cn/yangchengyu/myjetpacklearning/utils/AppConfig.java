@@ -11,11 +11,21 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 
+import cn.yangchengyu.myjetpacklearning.model.BottomBar;
 import cn.yangchengyu.myjetpacklearning.model.Destination;
 
 public class AppConfig {
 
     private static HashMap<String, Destination> destConfig;
+    private static BottomBar bottomBar;
+
+    public static BottomBar getBottomBarConfig() {
+        if (bottomBar == null) {
+            String content = parseFile("main_tabs_config.json");
+            bottomBar = JSON.parseObject(content, BottomBar.class);
+        }
+        return bottomBar;
+    }
 
     public static HashMap<String, Destination> getDestConfig() {
         if (destConfig == null) {
