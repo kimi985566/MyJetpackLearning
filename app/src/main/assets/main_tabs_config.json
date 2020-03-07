@@ -1,5 +1,5 @@
 {
-  "activeColor": "#333333",
+  "activeColor": "#000000",
   "inActiveColor": "#666666",
   "selectTab": 0,
   "tabs": [
@@ -18,7 +18,7 @@
       "title": "沙发"
     },
     {
-      "size": 42,
+      "size": 40,
       "enable": true,
       "index": 2,
       "tintColor": "#ff678f",
