@@ -139,7 +139,7 @@ public class NavProcessor extends AbstractProcessor {
         return true;
     }
 
-    private void handleDestination(Set<? extends Element> elements, Class<? extends Annotation> annotationClaz, HashMap<String, JSONObject> destMap) {
+    private void handleDestination(Set<? extends Element> elements, Class<? extends Annotation> annotationClass, HashMap<String, JSONObject> destMap) {
         if (elements == null || elements.isEmpty()) {
             return;
         }
@@ -161,7 +161,7 @@ public class NavProcessor extends AbstractProcessor {
             //标记该页面是fragment 还是activity类型的
             boolean isFragment = false;
 
-            Annotation annotation = element.getAnnotation(annotationClaz);
+            Annotation annotation = element.getAnnotation(annotationClass);
             if (annotation instanceof FragmentDestination) {
                 FragmentDestination dest = (FragmentDestination) annotation;
                 pageUrl = dest.pageUrl();
