@@ -12,6 +12,7 @@ import androidx.navigation.fragment.FragmentNavigator;
 
 import java.util.HashMap;
 
+import cn.yangchengyu.libcommon.utils.AppGlobals;
 import cn.yangchengyu.myjetpacklearning.model.Destination;
 import cn.yangchengyu.myjetpacklearning.navigator.FixFragmentNavigator;
 

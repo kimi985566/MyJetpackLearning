@@ -1,4 +1,4 @@
-package cn.yangchengyu.myjetpacklearning.utils;
+package cn.yangchengyu.libcommon.utils;
 
 import android.app.Application;
 

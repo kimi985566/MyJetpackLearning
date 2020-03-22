@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 
+import cn.yangchengyu.libcommon.utils.AppGlobals;
 import cn.yangchengyu.myjetpacklearning.model.BottomBar;
 import cn.yangchengyu.myjetpacklearning.model.Destination;
 
