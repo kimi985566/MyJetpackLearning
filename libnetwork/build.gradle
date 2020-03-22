@@ -1,4 +1,4 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
@@ -8,27 +8,19 @@ android {
     buildToolsVersion "29.0.3"
 
     defaultConfig {
-        applicationId "cn.yangchengyu.myjetpacklearning"
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        //multiDex
-        multiDexEnabled true
+        consumerProguardFiles 'consumer-rules.pro'
     }
 
     buildTypes {
         release {
-            zipAlignEnabled true
-            shrinkResources true
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-        debug {
             minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
@@ -41,20 +33,13 @@ android {
         jvmTarget = "1.8"
     }
 
-    dataBinding {
-        enabled = true
-    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    //注解
-    implementation project(':libnavannotation')
-    //注解compiler
-    kapt project(":libnavcompiler")
-    //网络库
-    implementation project(':libnetwork')
-    //常用库
-    implementation project(':libcommon')
+    implementation project(":libcommon")
+
+    implementation 'com.squareup.okhttp3:okhttp:4.2.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.14.2'
 }

@@ -4,11 +4,11 @@ apply plugin: 'kotlin-kapt'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     implementation project(':libnavannotation')
     //fastJson
-    implementation 'com.alibaba:fastjson:1.2.60'
+    implementation 'com.alibaba:fastjson:1.2.62'
     //implementation和kapt同时都要
     implementation 'com.google.auto.service:auto-service:1.0-rc6'
     kapt 'com.google.auto.service:auto-service:1.0-rc6'

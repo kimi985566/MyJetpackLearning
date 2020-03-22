@@ -48,7 +48,7 @@ public class FixFragmentNavigator extends FragmentNavigator {
         }
 
         String className = destination.getClassName();
-        if (className.charAt(0) == '.') {
+        if ('.' == className.charAt(0)) {
             className = context.getPackageName() + className;
         }
 
