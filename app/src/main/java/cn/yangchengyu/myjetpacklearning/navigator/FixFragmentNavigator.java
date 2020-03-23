@@ -137,7 +137,7 @@ public class FixFragmentNavigator extends FragmentNavigator {
         }
     }
 
-    private String generateBackStackName(int backStackindex, int destid) {
-        return backStackindex + "-" + destid;
+    private String generateBackStackName(int backStackIndex, int destId) {
+        return backStackIndex + "-" + destId;
     }
 }
