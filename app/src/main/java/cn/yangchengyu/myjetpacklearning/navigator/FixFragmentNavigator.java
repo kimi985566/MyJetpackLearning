@@ -98,7 +98,7 @@ public class FixFragmentNavigator extends FragmentNavigator {
         final boolean initialNavigation = (mBackStack != null && mBackStack.isEmpty());
         final boolean isSingleTopReplacement = navOptions != null && !initialNavigation
                 && navOptions.shouldLaunchSingleTop()
-                && (mBackStack != null && mBackStack.peekLast() == destId);
+                && (mBackStack != null && mBackStack.peekLast() != null && destId == mBackStack.peekLast());
 
         boolean isAdded;
         if (initialNavigation) {
