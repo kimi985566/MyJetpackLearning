@@ -105,7 +105,7 @@ dependencies {
     api 'com.github.chrisbanes:PhotoView:2.3.0@aar'
 
     //fastjson解析
-    api 'com.alibaba:fastjson:1.2.67'
+    api 'com.alibaba:fastjson:1.2.68'
 
     //androidUtilCode
     api 'com.blankj:utilcodex:1.27.2'
