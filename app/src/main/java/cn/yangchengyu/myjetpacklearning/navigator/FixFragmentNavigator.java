@@ -18,6 +18,7 @@ import androidx.navigation.fragment.FragmentNavigator;
 
 import java.lang.reflect.Field;
 import java.util.ArrayDeque;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -51,7 +52,13 @@ public class FixFragmentNavigator extends FragmentNavigator {
         if ('.' == className.charAt(0)) {
             className = context.getPackageName() + className;
         }
-
+        //android.fragment.app.homefragment   homefragment
+        String tag = className.substring(className.lastIndexOf(".") + 1);
+        Fragment frag = manager.findFragmentByTag(tag);
+        if (frag == null) {
+            frag = instantiateFragment(context, manager, className, args);
+        }
+        frag.setArguments(args);
         final FragmentTransaction ft = manager.beginTransaction();
 
         int enterAnim = navOptions != null ? navOptions.getEnterAnim() : -1;
@@ -66,23 +73,15 @@ public class FixFragmentNavigator extends FragmentNavigator {
             ft.setCustomAnimations(enterAnim, exitAnim, popEnterAnim, popExitAnim);
         }
 
-        Fragment fragment = manager.getPrimaryNavigationFragment();
-        if (fragment != null) {
+        List<Fragment> fragments = manager.getFragments();
+        for (Fragment fragment : fragments) {
             ft.hide(fragment);
         }
-
-        Fragment frag;
-        String tag = String.valueOf(destination.getId());
-
-        frag = manager.findFragmentByTag(tag);
-        if (frag != null) {
-            ft.show(frag);
-        } else {
-            frag = instantiateFragment(context, manager, className, args);
-            frag.setArguments(args);
+        if (!frag.isAdded()) {
             ft.add(containerId, frag, tag);
         }
-
+        ft.show(frag);
+        //ft.replace(mContainerId, frag);
         ft.setPrimaryNavigationFragment(frag);
 
         final @IdRes int destId = destination.getId();
