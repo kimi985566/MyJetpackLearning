@@ -6,6 +6,8 @@ import android.os.Parcelable;
 import androidx.annotation.Nullable;
 import androidx.databinding.BaseObservable;
 
+import java.util.Objects;
+
 /**
  * Desc  :
  * Author: Chengyu Yang
@@ -34,16 +36,35 @@ public class Comment extends BaseObservable implements Parcelable {
     public Ugc ugc;
 
     @Override
-    public boolean equals(@Nullable Object obj) {
-        if (!(obj instanceof Comment)) {
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Comment)) {
             return false;
         }
+        Comment comment = (Comment) o;
+        return id == comment.id &&
+                itemId == comment.itemId &&
+                commentId == comment.commentId &&
+                userId == comment.userId &&
+                commentType == comment.commentType &&
+                createTime == comment.createTime &&
+                commentCount == comment.commentCount &&
+                likeCount == comment.likeCount &&
+                width == comment.width &&
+                height == comment.height &&
+                hasLiked == comment.hasLiked &&
+                Objects.equals(commentText, comment.commentText) &&
+                Objects.equals(imageUrl, comment.imageUrl) &&
+                Objects.equals(videoUrl, comment.videoUrl) &&
+                Objects.equals(author, comment.author) &&
+                Objects.equals(getUgc(), comment.getUgc());
+    }
 
-        Comment newComment = (Comment) obj;
-        return likeCount == newComment.likeCount
-                && hasLiked == newComment.hasLiked
-                && (author != null && author.equals(newComment.author))
-                && (ugc != null && ugc.equals(newComment.ugc));
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, itemId, commentId, userId, commentType, createTime, commentCount, likeCount, commentText, imageUrl, videoUrl, width, height, hasLiked, author, getUgc());
     }
 
     public Ugc getUgc() {

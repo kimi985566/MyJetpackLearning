@@ -1,0 +1,4 @@
+<resources>
+    <string name="empty_view_text">虽然什么也没有,要不刷新试试</string>
+    <string name="empty_view_button">我知道了</string>
+</resources>

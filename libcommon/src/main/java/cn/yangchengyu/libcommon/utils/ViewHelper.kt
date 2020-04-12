@@ -7,7 +7,7 @@ import android.view.ViewOutlineProvider
 import cn.yangchengyu.libcommon.R
 
 /**
- * Desc  :
+ * Desc  : 用于设置圆角等
  * Author: Chengyu Yang
  * Date  : 2020/3/23
  */
@@ -21,7 +21,12 @@ object ViewHelper {
 
     @JvmStatic
     fun setViewOutline(view: View, attributes: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) {
-        view.context.theme.obtainStyledAttributes(attributes, R.styleable.viewOutLineStrategy, defStyleAttr, defStyleRes).apply {
+        view.context.theme.obtainStyledAttributes(
+            attributes,
+            R.styleable.viewOutLineStrategy,
+            defStyleAttr,
+            defStyleRes
+        ).apply {
             var radius = 0
             var hideSide = 0
 
@@ -67,10 +72,9 @@ object ViewHelper {
                 val top = 0
                 val left = 0
 
-                if (radius <= 0) {
-                    outline.setRect(left, top, w, h)
-                } else {
-                    outline.setRoundRect(left, top, w, h, radius.toFloat())
+                when {
+                    radius <= 0 -> outline.setRect(left, top, w, h)
+                    else -> outline.setRoundRect(left, top, w, h, radius.toFloat())
                 }
             }
         }

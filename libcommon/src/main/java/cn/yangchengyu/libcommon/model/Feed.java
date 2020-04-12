@@ -2,11 +2,11 @@ package cn.yangchengyu.libcommon.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.text.TextUtils;
 
-import androidx.annotation.Nullable;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
+
+import java.util.Objects;
 
 /**
  * Desc  :
@@ -49,27 +49,35 @@ public class Feed extends BaseObservable implements Parcelable {
     }
 
     @Override
-    public boolean equals(@Nullable Object obj) {
-        if (!(obj instanceof Feed)) {
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Feed)) {
             return false;
         }
-        Feed newFeed = (Feed) obj;
-        return id == newFeed.id
-                && itemId == newFeed.itemId
-                && itemType == newFeed.itemType
-                && createTime == newFeed.createTime
-                && duration == newFeed.duration
-                && TextUtils.equals(feeds_text, newFeed.feeds_text)
-                && authorId == newFeed.authorId
-                && TextUtils.equals(activityIcon, newFeed.activityIcon)
-                && TextUtils.equals(activityText, newFeed.activityText)
-                && width == newFeed.width
-                && height == newFeed.height
-                && TextUtils.equals(url, newFeed.url)
-                && TextUtils.equals(cover, newFeed.cover)
-                && (author != null && author.equals(newFeed.author))
-                && (topComment != null && topComment.equals(newFeed.topComment))
-                && (ugc != null && ugc.equals(newFeed.ugc));
+        Feed feed = (Feed) o;
+        return id == feed.id &&
+                itemId == feed.itemId &&
+                itemType == feed.itemType &&
+                createTime == feed.createTime &&
+                Double.compare(feed.duration, duration) == 0 &&
+                authorId == feed.authorId &&
+                width == feed.width &&
+                height == feed.height &&
+                Objects.equals(feeds_text, feed.feeds_text) &&
+                Objects.equals(activityIcon, feed.activityIcon) &&
+                Objects.equals(activityText, feed.activityText) &&
+                Objects.equals(url, feed.url) &&
+                Objects.equals(cover, feed.cover) &&
+                Objects.equals(getAuthor(), feed.getAuthor()) &&
+                Objects.equals(topComment, feed.topComment) &&
+                Objects.equals(getUgc(), feed.getUgc());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, itemId, itemType, createTime, duration, feeds_text, authorId, activityIcon, activityText, width, height, url, cover, getAuthor(), topComment, getUgc());
     }
 
     @Override

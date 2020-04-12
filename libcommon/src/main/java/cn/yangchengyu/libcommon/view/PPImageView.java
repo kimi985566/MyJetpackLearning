@@ -27,12 +27,13 @@ import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 /**
- * Desc  :
+ * Desc  : 可以Databing的ImageView
  * Author: Chengyu Yang
  * Date  : 2020/3/23
  */
 
 public class PPImageView extends AppCompatImageView {
+
     public PPImageView(Context context) {
         super(context);
     }
@@ -53,12 +54,11 @@ public class PPImageView extends AppCompatImageView {
 
     public void bindData(int widthPx, int heightPx, final int marginLeft, final int maxWidth, final int maxHeight, String imageUrl) {
         if (TextUtils.isEmpty(imageUrl)) {
-            setVisibility(GONE);
+            this.setVisibility(GONE);
             return;
-        } else {
-            setVisibility(VISIBLE);
         }
 
+        this.setVisibility(VISIBLE);
         if (widthPx <= 0 || heightPx <= 0) {
             Glide.with(this).load(imageUrl).into(new SimpleTarget<Drawable>() {
                 @Override
@@ -130,11 +130,13 @@ public class PPImageView extends AppCompatImageView {
         ViewGroup.LayoutParams params = getLayoutParams();
         params.width = finalWidth;
         params.height = finalHeight;
+
         if (params instanceof FrameLayout.LayoutParams) {
             ((FrameLayout.LayoutParams) params).leftMargin = height > width ? SizeUtils.dp2px(marginLeft) : 0;
         } else if (params instanceof LinearLayout.LayoutParams) {
             ((LinearLayout.LayoutParams) params).leftMargin = height > width ? SizeUtils.dp2px(marginLeft) : 0;
         }
+
         setLayoutParams(params);
     }
 }
