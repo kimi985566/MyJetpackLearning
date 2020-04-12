@@ -8,7 +8,7 @@ dependencies {
 
     implementation project(':libnavannotation')
     //fastJson
-    implementation 'com.alibaba:fastjson:1.2.62'
+    implementation 'com.alibaba:fastjson:1.2.68'
     //implementation和kapt同时都要
     implementation 'com.google.auto.service:auto-service:1.0-rc6'
     kapt 'com.google.auto.service:auto-service:1.0-rc6'

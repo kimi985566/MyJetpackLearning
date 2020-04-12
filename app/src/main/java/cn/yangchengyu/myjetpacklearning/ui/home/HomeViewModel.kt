@@ -1,13 +1,16 @@
 package cn.yangchengyu.myjetpacklearning.ui.home
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.paging.DataSource
+import cn.yangchengyu.libcommon.model.Feed
+import cn.yangchengyu.libcommon.ui.AbsPageListViewModel
 
-class HomeViewModel : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
+class HomeViewModel : AbsPageListViewModel<Feed>() {
+
+    var feedType: String? = null
+
+    override fun createDataSource(): DataSource<Int, Feed> {
+        return HomeFeedDataSource(viewModelScope, feedType)
     }
-    val text: LiveData<String> = _text
 }

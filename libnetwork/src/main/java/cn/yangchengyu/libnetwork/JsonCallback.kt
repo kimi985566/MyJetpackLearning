@@ -1,5 +1,7 @@
 package cn.yangchengyu.libnetwork
 
+import cn.yangchengyu.libnetwork.model.ApiResponse
+
 /**
  * Desc  :
  * Author: Chengyu Yang

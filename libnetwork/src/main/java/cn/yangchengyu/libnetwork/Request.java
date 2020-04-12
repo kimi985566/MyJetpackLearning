@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.yangchengyu.libnetwork.cache.CacheManager;
+import cn.yangchengyu.libnetwork.model.ApiResponse;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;

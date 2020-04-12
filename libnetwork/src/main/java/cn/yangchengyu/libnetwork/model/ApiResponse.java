@@ -1,4 +1,4 @@
-package cn.yangchengyu.libnetwork;
+package cn.yangchengyu.libnetwork.model;
 
 /**
  * API返回类型
