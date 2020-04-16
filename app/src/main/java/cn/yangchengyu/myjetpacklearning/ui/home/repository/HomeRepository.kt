@@ -1,6 +1,5 @@
-package cn.yangchengyu.myjetpacklearning.ui.home
+package cn.yangchengyu.myjetpacklearning.ui.home.repository
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.LivePagedListBuilder
@@ -10,6 +9,7 @@ import cn.yangchengyu.libnetwork.repository.BaseRepository
 import cn.yangchengyu.libnetwork.services.HomeService
 import cn.yangchengyu.myjetpacklearning.ext.executeResponse
 import cn.yangchengyu.myjetpacklearning.ext.tryCatchLaunch
+import com.blankj.utilcode.util.LogUtils
 
 /**
  * Desc  :
@@ -25,13 +25,12 @@ class HomeRepository(
     companion object {
         private const val DATABASE_PAGE_SIZE = 20
         private const val NETWORK_ITEM_SIZE = 20
-        private const val CACHE_KEY_FOR_FEED = "cache_key_for_feed"
     }
 
-    fun refresh(feedType: String): RepoSearchResult {
+    fun refresh(feedType: String): HomeFeedResult {
 
         // Get data source factory from the local cache
-        val dataSourceFactory = cache.getFeeds(CACHE_KEY_FOR_FEED)
+        val dataSourceFactory = cache.getFeeds(DATABASE_PAGE_SIZE)
 
         // every new query creates a new BoundaryCallback
         // The BoundaryCallback will observe when the user reaches to the edges of
@@ -49,7 +48,10 @@ class HomeRepository(
             .build()
 
         // Get the network errors exposed by the boundary callback
-        return RepoSearchResult(data, networkErrors)
+        return HomeFeedResult(
+            data,
+            networkErrors
+        )
     }
 
     inner class HomeFeedBoundaryCallback(private val feedType: String) :
@@ -71,7 +73,7 @@ class HomeRepository(
          * Database returned 0 items. We should query the backend for more items.
          */
         override fun onZeroItemsLoaded() {
-            Log.d("RepoBoundaryCallback", "onZeroItemsLoaded")
+            LogUtils.i("onZeroItemsLoaded")
             requestAndSaveData(feedType)
         }
 
@@ -79,7 +81,7 @@ class HomeRepository(
          * When all items in the database were loaded, we need to query the backend for more items.
          */
         override fun onItemAtEndLoaded(itemAtEnd: Feed) {
-            Log.d("RepoBoundaryCallback", "onItemAtEndLoaded")
+            LogUtils.i("onItemAtEndLoaded")
             requestAndSaveData(feedType)
         }
 
@@ -101,8 +103,10 @@ class HomeRepository(
                         },
                         successBlock = { response ->
                             response.data?.data?.filterNotNull()?.let { list ->
-                                cache.insertFeeds(CACHE_KEY_FOR_FEED, response.data!!) {
-                                    lastKey = list[list.size - 1].id
+                                cache.insertFeeds(list) {
+                                    if (list.isNotEmpty()) {
+                                        lastKey = list[list.size - 1].id
+                                    }
                                     isRequestInProgress = false
                                 }
                             }

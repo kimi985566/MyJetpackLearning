@@ -1,4 +1,4 @@
-package cn.yangchengyu.myjetpacklearning.ui.home
+package cn.yangchengyu.myjetpacklearning.ui.home.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,6 +10,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import cn.yangchengyu.libnavannotation.FragmentDestination
 import cn.yangchengyu.myjetpacklearning.R
+import cn.yangchengyu.myjetpacklearning.ui.home.adapter.HomeFeedAdapter
+import cn.yangchengyu.myjetpacklearning.ui.home.HomeFeedInjection
+import cn.yangchengyu.myjetpacklearning.ui.home.viewmodel.HomeViewModel
 import kotlinx.android.synthetic.main.fragment_home.*
 
 
@@ -30,7 +33,11 @@ class HomeFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         homeViewModel =
-            ViewModelProviders.of(this, HomeFeedInjection.provideHomeViewModelFactory(context!!))
+            ViewModelProviders.of(this,
+                HomeFeedInjection.provideHomeViewModelFactory(
+                    context!!
+                )
+            )
                 .get(HomeViewModel::class.java)
 
         initAdapter()
@@ -39,7 +46,10 @@ class HomeFragment : Fragment() {
     }
 
     private fun initAdapter() {
-        list.adapter = HomeFeedAdapter(context!!)
+        list.adapter =
+            HomeFeedAdapter(
+                context!!
+            )
         homeViewModel.repos.observe(viewLifecycleOwner, Observer {
             (list.adapter as? HomeFeedAdapter)?.submitList(it)
         })

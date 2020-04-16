@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cn.yangchengyu.myjetpacklearning.ui.home
+package cn.yangchengyu.myjetpacklearning.ui.home.repository
 
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
@@ -24,7 +24,7 @@ import cn.yangchengyu.libcommon.model.Feed
  * RepoSearchResult from a search, which contains LiveData<List<Repo>> holding query data,
  * and a LiveData<String> of network error state.
  */
-data class RepoSearchResult(
+data class HomeFeedResult(
     val data: LiveData<PagedList<Feed>>,
     val networkErrors: LiveData<String>
 )

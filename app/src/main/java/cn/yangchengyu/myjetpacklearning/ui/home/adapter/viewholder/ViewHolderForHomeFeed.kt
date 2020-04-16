@@ -1,4 +1,4 @@
-package cn.yangchengyu.myjetpacklearning.ui.home
+package cn.yangchengyu.myjetpacklearning.ui.home.adapter.viewholder
 
 import android.view.View
 import androidx.databinding.ViewDataBinding

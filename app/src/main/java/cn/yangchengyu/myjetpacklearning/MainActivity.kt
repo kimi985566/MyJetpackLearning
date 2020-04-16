@@ -7,6 +7,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import cn.yangchengyu.myjetpacklearning.utils.NavGraphBuilder
+import com.blankj.utilcode.util.BarUtils
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -16,6 +17,8 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        BarUtils.transparentStatusBar(this)
+        BarUtils.setStatusBarLightMode(this, true)
         setContentView(R.layout.activity_main)
 
         navController = findNavController(navHostFragment)
