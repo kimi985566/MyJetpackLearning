@@ -1,6 +1,6 @@
 package cn.yangchengyu.libnetwork.services
 
-import cn.yangchengyu.libcommon.model.Feed
+import cn.yangchengyu.libcommon.model.HomeFeedData
 import cn.yangchengyu.libnetwork.model.ApiResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -15,11 +15,11 @@ interface HomeService {
     /**
      * 获取首页列表
      * */
-    @GET("/feeds/queryHotFeedsList")
+    @GET("/serverdemo/feeds/queryHotFeedsList")
     suspend fun getHomeFeedList(
         @Query("feedType") feedType: String,
         @Query("userId") userId: String,
         @Query("feedId") key: Int,
         @Query("pageCount") count: Int
-    ): ApiResponse<List<Feed?>?>
+    ): ApiResponse<HomeFeedData?>
 }

@@ -7,6 +7,7 @@ import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import androidx.databinding.library.baseAdapters.BR;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -14,7 +15,7 @@ import java.util.Objects;
  * Author: Chengyu Yang
  * Date  : 2020/3/23
  */
-public class User extends BaseObservable implements Parcelable {
+public class User extends BaseObservable implements Parcelable, Serializable {
 
     /**
      * id : 962

@@ -1,16 +1,27 @@
 package cn.yangchengyu.myjetpacklearning.ui.home
 
-import androidx.lifecycle.viewModelScope
-import androidx.paging.DataSource
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
+import androidx.lifecycle.ViewModel
+import androidx.paging.PagedList
 import cn.yangchengyu.libcommon.model.Feed
-import cn.yangchengyu.libcommon.ui.AbsPageListViewModel
 
+class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
 
-class HomeViewModel : AbsPageListViewModel<Feed>() {
+    //feedType
+    private val feedTypeLiveData = MutableLiveData<String>()
+    private val repoResult: LiveData<RepoSearchResult> = Transformations.map(feedTypeLiveData) {
+        repository.refresh(it)
+    }
 
-    var feedType: String? = null
+    val repos: LiveData<PagedList<Feed>> = Transformations.switchMap(repoResult) { it.data }
+    val networkErrors: LiveData<String> = Transformations.switchMap(repoResult) { it.networkErrors }
 
-    override fun createDataSource(): DataSource<Int, Feed> {
-        return HomeFeedDataSource(viewModelScope, feedType)
+    /**
+     * 刷新feedType
+     * */
+    fun refreshFeedType(feedType: String) {
+        feedTypeLiveData.postValue(feedType)
     }
 }

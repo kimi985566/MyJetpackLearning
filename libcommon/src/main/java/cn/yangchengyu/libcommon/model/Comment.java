@@ -3,9 +3,9 @@ package cn.yangchengyu.libcommon.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import androidx.annotation.Nullable;
 import androidx.databinding.BaseObservable;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -13,7 +13,7 @@ import java.util.Objects;
  * Author: Chengyu Yang
  * Date  : 2020/3/29
  */
-public class Comment extends BaseObservable implements Parcelable {
+public class Comment extends BaseObservable implements Parcelable, Serializable {
 
     public static final int COMMENT_TYPE_IMAGE_TEXT = 2;
     public static final int COMMENT_TYPE_VIDEO = 3;

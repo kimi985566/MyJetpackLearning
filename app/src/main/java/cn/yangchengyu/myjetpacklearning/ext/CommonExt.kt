@@ -32,15 +32,15 @@ fun View.onClick(method: () -> Unit): View {
 /**
  * 处理数据
  * */
-suspend fun executeResponse(
-    response: ApiResponse<*>,
-    successBlock: suspend CoroutineScope.() -> Unit,
+suspend fun <T> executeResponse(
+    response: ApiResponse<T>,
+    successBlock: suspend CoroutineScope.(response: ApiResponse<T>) -> Unit,
     errorBlock: suspend CoroutineScope.() -> Unit
 ) {
     coroutineScope {
-        when (response.isSuccess) {
-            false -> errorBlock()
-            else -> successBlock()
+        when (response.status) {
+            200 -> successBlock(response)
+            else -> errorBlock()
         }
     }
 }

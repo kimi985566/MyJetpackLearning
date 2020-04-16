@@ -4,12 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import cn.yangchengyu.libnavannotation.FragmentDestination
 import cn.yangchengyu.myjetpacklearning.R
+import kotlinx.android.synthetic.main.fragment_home.*
 
 
 @FragmentDestination(pageUrl = "main/tabs/home", asStarter = true)
@@ -22,11 +23,28 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        homeViewModel =
-            ViewModelProviders.of(this).get(HomeViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_home, container, false)
-        val textView: TextView = root.findViewById(R.id.text_home)
+        return inflater.inflate(R.layout.fragment_home, container, false)
+    }
 
-        return root
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        homeViewModel =
+            ViewModelProviders.of(this, HomeFeedInjection.provideHomeViewModelFactory(context!!))
+                .get(HomeViewModel::class.java)
+
+        initAdapter()
+
+        homeViewModel.refreshFeedType("all")
+    }
+
+    private fun initAdapter() {
+        list.adapter = HomeFeedAdapter(context!!)
+        homeViewModel.repos.observe(viewLifecycleOwner, Observer {
+            (list.adapter as? HomeFeedAdapter)?.submitList(it)
+        })
+        homeViewModel.networkErrors.observe(viewLifecycleOwner, Observer {
+            Toast.makeText(context, "\uD83D\uDE28 Wooops $it", Toast.LENGTH_LONG).show()
+        })
     }
 }

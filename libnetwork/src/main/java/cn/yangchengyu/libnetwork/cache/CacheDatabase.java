@@ -18,7 +18,7 @@ public abstract class CacheDatabase extends RoomDatabase {
         //创建一个内存数据库
         //但是这种数据库的数据只存在于内存中，也就是进程被杀之后，数据随之丢失
         //Room.inMemoryDatabaseBuilder()
-        DATABASE = Room.databaseBuilder(AppGlobals.getApplication(), CacheDatabase.class, "learning_jetpack_cache")
+        DATABASE = Room.databaseBuilder(AppGlobals.getApplication(), CacheDatabase.class, "learning_jetpack_cache.db")
                 //是否允许在主线程进行查询
                 .allowMainThreadQueries()
                 //数据库创建和打开后的回调

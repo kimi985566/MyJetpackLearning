@@ -31,10 +31,12 @@ object CacheManager {
 
     @JvmStatic
     fun getCache(key: String?): Any? {
-        val cache = CacheDatabase.get().cache.getCache(key)
+        if (key.isNullOrEmpty()) {
+            return null
+        }
 
-        return cache?.data?.run {
-            toObject(cache.data)
+        return CacheDatabase.get()?.cache?.getCache(key)?.data?.run {
+            toObject(this)
         } ?: run {
             null
         }

@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -13,7 +14,7 @@ import java.util.Objects;
  * Author: Chengyu Yang
  * Date  : 2020/3/29
  */
-public class Feed extends BaseObservable implements Parcelable {
+public class Feed extends BaseObservable implements Parcelable, Serializable {
 
     public static final int TYPE_IMAGE_TEXT = 1;//图文
     public static final int TYPE_VIDEO = 2;//视频

@@ -5,6 +5,7 @@ import androidx.paging.DataSource
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import androidx.paging.PagedList.BoundaryCallback
+import cn.yangchengyu.libcommon.model.NetworkState
 import com.blankj.utilcode.util.LogUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -22,7 +23,10 @@ abstract class AbsPageListViewModel<T> : ViewModel(), LifecycleObserver {
     var dataSource: DataSource<Int, T>? = null
 
     //PageData
-    var pageData: LiveData<PagedList<T>>? = null
+    var pagedListData: LiveData<PagedList<T>>? = null
+
+    //网络状态
+    val networkState by lazy { MutableLiveData<NetworkState>() }
 
     //boundaryPageData
     val boundaryPageData by lazy { MutableLiveData<Boolean>() }
@@ -60,18 +64,19 @@ abstract class AbsPageListViewModel<T> : ViewModel(), LifecycleObserver {
      * Datasource Factory
      * */
     private var factory: DataSource.Factory<Int, T> = object : DataSource.Factory<Int, T>() {
-        override fun create(): DataSource<Int, T> =
+        override fun create(): DataSource<Int, T> {
             dataSource?.takeIf { dataSource ->
                 dataSource.isInvalid
-            }?.let {
-                it
+            }?.let { dataSource ->
+                return dataSource
             } ?: run {
-                createDataSource()
+                return createDataSource()
             }
+        }
     }
 
     init {
-        pageData = LivePagedListBuilder(factory, config)
+        pagedListData = LivePagedListBuilder(factory, config)
             .setInitialLoadKey(0)
             .setBoundaryCallback(callback)
             .build()

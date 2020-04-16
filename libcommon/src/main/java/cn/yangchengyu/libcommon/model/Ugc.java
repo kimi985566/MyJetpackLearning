@@ -7,9 +7,10 @@ import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import androidx.databinding.library.baseAdapters.BR;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Ugc extends BaseObservable implements Parcelable {
+public class Ugc extends BaseObservable implements Parcelable, Serializable {
 
     public int likeCount;
     public int shareCount;

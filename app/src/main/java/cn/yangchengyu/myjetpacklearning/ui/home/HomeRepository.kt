@@ -1,9 +1,15 @@
 package cn.yangchengyu.myjetpacklearning.ui.home
 
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
 import cn.yangchengyu.libcommon.model.Feed
-import cn.yangchengyu.libnetwork.RetrofitFactory
-import cn.yangchengyu.libnetwork.model.ApiResponse
 import cn.yangchengyu.libnetwork.repository.BaseRepository
+import cn.yangchengyu.libnetwork.services.HomeService
+import cn.yangchengyu.myjetpacklearning.ext.executeResponse
+import cn.yangchengyu.myjetpacklearning.ext.tryCatchLaunch
 
 /**
  * Desc  :
@@ -11,22 +17,106 @@ import cn.yangchengyu.libnetwork.repository.BaseRepository
  * Date  : 2020/4/12
  */
 
-class HomeRepository : BaseRepository() {
-    /**
-     * 获取首页数据
-     * */
-    suspend fun getHomeList(
-        feedType: String?,
-        userId: String?,
-        feedId: Int?,
-        pageCount: Int?
-    ): ApiResponse<List<Feed?>?> {
-        return apiCall {
-            RetrofitFactory.homeService.getHomeFeedList(
-                feedType ?: "",
-                userId ?: "",
-                feedId ?: 0,
-                pageCount ?: 0
+class HomeRepository(
+    private val service: HomeService,
+    private val cache: HomeFeedLocalCache
+) : BaseRepository() {
+
+    companion object {
+        private const val DATABASE_PAGE_SIZE = 20
+        private const val NETWORK_ITEM_SIZE = 20
+        private const val CACHE_KEY_FOR_FEED = "cache_key_for_feed"
+    }
+
+    fun refresh(feedType: String): RepoSearchResult {
+
+        // Get data source factory from the local cache
+        val dataSourceFactory = cache.getFeeds(CACHE_KEY_FOR_FEED)
+
+        // every new query creates a new BoundaryCallback
+        // The BoundaryCallback will observe when the user reaches to the edges of
+        // the list and update the database with extra data
+        val boundaryCallback = HomeFeedBoundaryCallback(feedType)
+        val networkErrors = boundaryCallback.networkErrors
+
+        val config = PagedList.Config.Builder()
+            .setPageSize(DATABASE_PAGE_SIZE)
+            .build()
+
+        // Get the paged list
+        val data = LivePagedListBuilder(dataSourceFactory, config)
+            .setBoundaryCallback(boundaryCallback)
+            .build()
+
+        // Get the network errors exposed by the boundary callback
+        return RepoSearchResult(data, networkErrors)
+    }
+
+    inner class HomeFeedBoundaryCallback(private val feedType: String) :
+        PagedList.BoundaryCallback<Feed>() {
+
+        // keep the last requested page. When the request is successful, increment the page number.
+        private var lastKey = 0
+
+        private val _networkErrors = MutableLiveData<String>()
+
+        // LiveData of network errors.
+        val networkErrors: LiveData<String>
+            get() = _networkErrors
+
+        // avoid triggering multiple requests in the same time
+        private var isRequestInProgress = false
+
+        /**
+         * Database returned 0 items. We should query the backend for more items.
+         */
+        override fun onZeroItemsLoaded() {
+            Log.d("RepoBoundaryCallback", "onZeroItemsLoaded")
+            requestAndSaveData(feedType)
+        }
+
+        /**
+         * When all items in the database were loaded, we need to query the backend for more items.
+         */
+        override fun onItemAtEndLoaded(itemAtEnd: Feed) {
+            Log.d("RepoBoundaryCallback", "onItemAtEndLoaded")
+            requestAndSaveData(feedType)
+        }
+
+        private fun requestAndSaveData(feedType: String) {
+            if (isRequestInProgress) return
+
+            isRequestInProgress = true
+
+            tryCatchLaunch(
+                tryBlock = {
+                    executeResponse(
+                        response = apiCall {
+                            service.getHomeFeedList(
+                                feedType,
+                                "",
+                                lastKey,
+                                NETWORK_ITEM_SIZE
+                            )
+                        },
+                        successBlock = { response ->
+                            response.data?.data?.filterNotNull()?.let { list ->
+                                cache.insertFeeds(CACHE_KEY_FOR_FEED, response.data!!) {
+                                    lastKey = list[list.size - 1].id
+                                    isRequestInProgress = false
+                                }
+                            }
+                        },
+                        errorBlock = {
+                            _networkErrors.postValue("请求错误")
+                            isRequestInProgress = false
+                        }
+                    )
+                },
+                catchBlock = {
+                    _networkErrors.postValue("请求异常")
+                    isRequestInProgress = false
+                }
             )
         }
     }

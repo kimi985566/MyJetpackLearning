@@ -5,7 +5,6 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Bundle
 import androidx.multidex.MultiDexApplication
-import cn.yangchengyu.libnetwork.ApiService
 import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.Utils
 
@@ -22,8 +21,6 @@ class MyApplication : MultiDexApplication() {
 
         //注册AndroidCode工具
         initAndroidCodeUtils()
-        //注册网络工具
-        ApiService.init("http://123.56.232.18:8080/serverdemo", null)
         //注册生命周期回调
         registerActivityLifecycleCallbacks(lifecycleCallbacks)
     }

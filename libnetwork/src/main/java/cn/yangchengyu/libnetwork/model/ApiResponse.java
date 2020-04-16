@@ -5,18 +5,9 @@ package cn.yangchengyu.libnetwork.model;
  */
 public class ApiResponse<T> {
 
-    private boolean success;
     private int status;
     private String message;
-    private T body;
-
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public void setSuccess(boolean success) {
-        this.success = success;
-    }
+    private T data;
 
     public int getStatus() {
         return status;
@@ -34,11 +25,11 @@ public class ApiResponse<T> {
         this.message = message;
     }
 
-    public T getBody() {
-        return body;
+    public T getData() {
+        return data;
     }
 
-    public void setBody(T body) {
-        this.body = body;
+    public void setData(T data) {
+        this.data = data;
     }
 }

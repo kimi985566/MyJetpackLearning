@@ -20,12 +20,10 @@ import kotlinx.android.synthetic.main.layout_player_view.view.*
 class ListPlayerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int? = 0
-) : FrameLayout(context) {
+    defStyleAttr: Int = 0
+) : FrameLayout(context, attrs, defStyleAttr) {
 
-    private var mCategory: String? = null
     private var mVideoUrl: String? = null
-    private var isPlaying = false
     private var mWidthPx = 0
     private var mHeightPx = 0
 
@@ -33,8 +31,7 @@ class ListPlayerView @JvmOverloads constructor(
         View.inflate(context, R.layout.layout_player_view, this)
     }
 
-    fun bindData(category: String, widthPx: Int, heightPx: Int, coverUrl: String?, videoUrl: String) {
-        mCategory = category
+    fun bindData(widthPx: Int, heightPx: Int, coverUrl: String?, videoUrl: String) {
         mVideoUrl = videoUrl
         mWidthPx = widthPx
         mHeightPx = heightPx

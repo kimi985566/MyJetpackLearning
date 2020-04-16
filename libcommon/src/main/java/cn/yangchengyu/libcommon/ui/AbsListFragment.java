@@ -76,6 +76,13 @@ public abstract class AbsListFragment<T, M extends AbsPageListViewModel<T>> exte
         refreshLayout = binding.refreshLayout;
         emptyView = binding.emptyView;
 
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
         refreshLayout.setEnableRefresh(true);
         refreshLayout.setEnableLoadMore(true);
         refreshLayout.setOnRefreshListener(this);
@@ -97,8 +104,6 @@ public abstract class AbsListFragment<T, M extends AbsPageListViewModel<T>> exte
         }
 
         genericViewModel();
-
-        return binding.getRoot();
     }
 
     private void genericViewModel() {
@@ -113,8 +118,8 @@ public abstract class AbsListFragment<T, M extends AbsPageListViewModel<T>> exte
                 viewModel = (M) ViewModelProviders.of(this).get(modelClazz);
 
                 //触发页面初始化数据加载的逻辑
-                if (viewModel.getPageData() != null) {
-                    viewModel.getPageData().observe(getViewLifecycleOwner(), this::submitList);
+                if (viewModel.getPagedListData() != null) {
+                    viewModel.getPagedListData().observe(getViewLifecycleOwner(), this::submitList);
                 }
 
                 //监听分页时有无更多数据,以决定是否关闭上拉加载的动画
@@ -146,8 +151,10 @@ public abstract class AbsListFragment<T, M extends AbsPageListViewModel<T>> exte
 
         if (hasData) {
             emptyView.setVisibility(View.GONE);
+            refreshLayout.setVisibility(View.VISIBLE);
         } else {
             emptyView.setVisibility(View.VISIBLE);
+            refreshLayout.setVisibility(View.GONE);
         }
     }
 
@@ -157,5 +164,5 @@ public abstract class AbsListFragment<T, M extends AbsPageListViewModel<T>> exte
      *
      * @return adapter
      */
-    public abstract PagedListAdapter<T, RecyclerView.ViewHolder> getAdapter();
+    public abstract PagedListAdapter getAdapter();
 }
