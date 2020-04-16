@@ -15,15 +15,21 @@ import java.util.HashMap;
 
 import cn.yangchengyu.libcommon.utils.AppGlobals;
 import cn.yangchengyu.myjetpacklearning.model.Destination;
+import cn.yangchengyu.myjetpacklearning.navigator.FixFragmentNavigator;
 
 public class NavGraphBuilder {
 
-    public static void build(NavController navController) {
-        NavigatorProvider provider = navController.getNavigatorProvider();
+    public static void build(FragmentActivity activity, FragmentManager childFragmentManager, NavController controller, int containerId) {
+        NavigatorProvider provider = controller.getNavigatorProvider();
 
+        //NavGraphNavigator也是页面路由导航器的一种，只不过他比较特殊。
+        //它只为默认的展示页提供导航服务,但真正的跳转还是交给对应的navigator来完成的
         NavGraph navGraph = new NavGraph(new NavGraphNavigator(provider));
 
-        FragmentNavigator fragmentNavigator = provider.getNavigator(FragmentNavigator.class);
+        //FragmentNavigator fragmentNavigator = provider.getNavigator(FragmentNavigator.class);
+        //fragment的导航此处使用我们定制的FixFragmentNavigator，底部Tab切换时 使用hide()/show(),而不是replace()
+        FixFragmentNavigator fragmentNavigator = new FixFragmentNavigator(activity, childFragmentManager, containerId);
+        provider.addNavigator(fragmentNavigator);
         ActivityNavigator activityNavigator = provider.getNavigator(ActivityNavigator.class);
 
         HashMap<String, Destination> destConfig = AppConfig.getDestConfig();
@@ -49,6 +55,6 @@ public class NavGraphBuilder {
             }
         }
 
-        navController.setGraph(navGraph);
+        controller.setGraph(navGraph);
     }
 }

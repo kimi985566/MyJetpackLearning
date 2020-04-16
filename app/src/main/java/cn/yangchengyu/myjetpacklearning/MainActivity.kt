@@ -24,7 +24,12 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         navController = findNavController(navHostFragment)
         NavigationUI.setupWithNavController(navView, navController)
 
-        NavGraphBuilder.build(navController)
+        NavGraphBuilder.build(
+            this,
+            navHostFragment.childFragmentManager,
+            navController,
+            navHostFragment.id
+        )
 
         navView.setOnNavigationItemSelectedListener(this)
     }
