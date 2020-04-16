@@ -38,9 +38,10 @@ suspend fun <T> executeResponse(
     errorBlock: suspend CoroutineScope.() -> Unit
 ) {
     coroutineScope {
-        when (response.status) {
-            200 -> successBlock(response)
-            else -> errorBlock()
+        if (200 == response.status && response.data != null) {
+            successBlock(response)
+        } else {
+            errorBlock()
         }
     }
 }
