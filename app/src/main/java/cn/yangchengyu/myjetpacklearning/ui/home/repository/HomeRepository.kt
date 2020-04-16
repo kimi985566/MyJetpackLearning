@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import cn.yangchengyu.libcommon.model.Feed
+import cn.yangchengyu.libcommon.model.HomeFeedData
 import cn.yangchengyu.libnetwork.repository.BaseRepository
 import cn.yangchengyu.libnetwork.services.HomeService
 import cn.yangchengyu.myjetpacklearning.ext.executeResponse
@@ -28,7 +29,6 @@ class HomeRepository(
     }
 
     fun refresh(feedType: String): HomeFeedResult {
-
         // Get data source factory from the local cache
         val dataSourceFactory = cache.getFeeds(DATABASE_PAGE_SIZE)
 
@@ -101,15 +101,8 @@ class HomeRepository(
                                 NETWORK_ITEM_SIZE
                             )
                         },
-                        successBlock = { response ->
-                            response.data?.data?.filterNotNull()?.let { list ->
-                                cache.insertFeeds(list) {
-                                    if (list.isNotEmpty()) {
-                                        lastKey = list[list.size - 1].id
-                                    }
-                                    isRequestInProgress = false
-                                }
-                            }
+                        successBlock = { data ->
+                            processData(data)
                         },
                         errorBlock = { errorMsg ->
                             _networkErrors.postValue(errorMsg)
@@ -117,11 +110,22 @@ class HomeRepository(
                         }
                     )
                 },
-                catchBlock = {
-                    _networkErrors.postValue("请求异常")
+                catchBlock = { exception ->
+                    _networkErrors.postValue(exception.message)
                     isRequestInProgress = false
                 }
             )
+        }
+
+        private fun processData(data: HomeFeedData?) {
+            data?.data?.filterNotNull()?.let { list ->
+                cache.insertFeeds(list) {
+                    if (list.isNotEmpty()) {
+                        lastKey = list[list.size - 1].id
+                    }
+                    isRequestInProgress = false
+                }
+            }
         }
     }
 }

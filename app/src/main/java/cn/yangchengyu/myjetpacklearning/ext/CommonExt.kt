@@ -34,12 +34,12 @@ fun View.onClick(method: () -> Unit): View {
  * */
 suspend fun <T> executeResponse(
     response: ApiResponse<T>,
-    successBlock: suspend CoroutineScope.(response: ApiResponse<T>) -> Unit,
+    successBlock: suspend CoroutineScope.(responseData: T) -> Unit,
     errorBlock: suspend CoroutineScope.(errorMsg: String) -> Unit
 ) {
     coroutineScope {
         if (200 == response.status && response.data != null) {
-            successBlock(response)
+            successBlock(response.data)
         } else {
             errorBlock(response.message ?: "")
         }
@@ -51,16 +51,14 @@ suspend fun <T> executeResponse(
  * */
 fun tryCatchLaunch(
     tryBlock: suspend CoroutineScope.() -> Unit,
-    catchBlock: suspend CoroutineScope.() -> Unit
+    catchBlock: suspend CoroutineScope.(e: Exception) -> Unit
 ) {
     runBlocking {
-        coroutineScope {
-            try {
-                tryBlock()
-            } catch (e: Exception) {
-                LogUtils.e(this.coroutineContext.javaClass.simpleName + " " + e.toString())
-                catchBlock()
-            }
+        try {
+            tryBlock()
+        } catch (e: Exception) {
+            LogUtils.e(this.coroutineContext.javaClass.simpleName + " " + e.toString())
+            catchBlock(e)
         }
     }
 }

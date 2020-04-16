@@ -11,7 +11,6 @@ import kotlinx.coroutines.withContext
  * Date  : 2019-09-09
  */
 open class BaseRepository : LifecycleObserver {
-    suspend fun <T> apiCall(call: suspend () -> ApiResponse<T>): ApiResponse<T> {
-        return withContext(Dispatchers.IO) { call.invoke() }
-    }
+    suspend fun <T> apiCall(call: suspend () -> ApiResponse<T>): ApiResponse<T> =
+        withContext(Dispatchers.IO) { call.invoke() }
 }
