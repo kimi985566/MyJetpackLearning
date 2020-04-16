@@ -111,8 +111,8 @@ class HomeRepository(
                                 }
                             }
                         },
-                        errorBlock = {
-                            _networkErrors.postValue("请求错误")
+                        errorBlock = { errorMsg ->
+                            _networkErrors.postValue(errorMsg)
                             isRequestInProgress = false
                         }
                     )

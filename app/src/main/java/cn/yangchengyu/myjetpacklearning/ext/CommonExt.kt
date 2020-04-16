@@ -35,13 +35,13 @@ fun View.onClick(method: () -> Unit): View {
 suspend fun <T> executeResponse(
     response: ApiResponse<T>,
     successBlock: suspend CoroutineScope.(response: ApiResponse<T>) -> Unit,
-    errorBlock: suspend CoroutineScope.() -> Unit
+    errorBlock: suspend CoroutineScope.(errorMsg: String) -> Unit
 ) {
     coroutineScope {
         if (200 == response.status && response.data != null) {
             successBlock(response)
         } else {
-            errorBlock()
+            errorBlock(response.message ?: "")
         }
     }
 }
