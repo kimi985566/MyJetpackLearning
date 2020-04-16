@@ -1,4 +1,4 @@
-package cn.yangchengyu.myjetpacklearning.ui.home
+package cn.yangchengyu.myjetpacklearning.ui.home.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import cn.yangchengyu.libcommon.model.Feed
 import cn.yangchengyu.libcommon.ui.AbsPagedListAdapter
 import cn.yangchengyu.myjetpacklearning.R
+import cn.yangchengyu.myjetpacklearning.ui.home.adapter.viewholder.ViewHolderForHomeFeed
 
 /**
  * Desc  :
@@ -17,7 +18,9 @@ import cn.yangchengyu.myjetpacklearning.R
  */
 
 class HomeFeedAdapter(context: Context) :
-    AbsPagedListAdapter<Feed, ViewHolderForHomeFeed>(diffCallback) {
+    AbsPagedListAdapter<Feed, ViewHolderForHomeFeed>(
+        diffCallback
+    ) {
 
     companion object {
         private val diffCallback = object : DiffUtil.ItemCallback<Feed>() {
@@ -33,7 +36,10 @@ class HomeFeedAdapter(context: Context) :
 
     override fun onCreateViewHolder2(parent: ViewGroup?, viewType: Int): ViewHolderForHomeFeed {
         val binding = DataBindingUtil.inflate<ViewDataBinding>(inflater, viewType, parent, false)
-        return ViewHolderForHomeFeed(binding.root, binding)
+        return ViewHolderForHomeFeed(
+            binding.root,
+            binding
+        )
     }
 
     override fun onBindViewHolder2(holder: ViewHolderForHomeFeed?, position: Int) {

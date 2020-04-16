@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.databinding.BaseObservable;
+import androidx.room.Embedded;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -32,7 +33,9 @@ public class Comment extends BaseObservable implements Parcelable, Serializable 
     public int width;
     public int height;
     public boolean hasLiked;
+    @Embedded(prefix = "comment_author_")
     public User author;
+    @Embedded(prefix = "comment_ugc")
     public Ugc ugc;
 
     @Override

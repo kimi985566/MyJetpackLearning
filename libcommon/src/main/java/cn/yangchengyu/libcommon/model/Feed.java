@@ -3,8 +3,12 @@ package cn.yangchengyu.libcommon.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
+import androidx.room.Embedded;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -14,11 +18,14 @@ import java.util.Objects;
  * Author: Chengyu Yang
  * Date  : 2020/3/29
  */
+@Entity(tableName = "feeds")
 public class Feed extends BaseObservable implements Parcelable, Serializable {
 
     public static final int TYPE_IMAGE_TEXT = 1;//图文
     public static final int TYPE_VIDEO = 2;//视频
 
+    @NonNull
+    @PrimaryKey(autoGenerate = false)
     public int id;
     public long itemId;
     public int itemType;
@@ -32,8 +39,11 @@ public class Feed extends BaseObservable implements Parcelable, Serializable {
     public int height;
     public String url;
     public String cover;
+    @Embedded(prefix = "feed_author_")
     public User author;
+    @Embedded(prefix = "feed_top_comment_")
     public Comment topComment;
+    @Embedded(prefix = "feed_ugc_")
     public Ugc ugc;
 
     @Bindable
