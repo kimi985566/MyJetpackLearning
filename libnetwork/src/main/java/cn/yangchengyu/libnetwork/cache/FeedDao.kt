@@ -18,6 +18,6 @@ interface FeedDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertFeeds(posts: List<Feed>?)
 
-    @Query("SELECT * FROM feeds ORDER BY createTime DESC LIMIT :limitNumber")
-    fun getFeeds(limitNumber: Int): DataSource.Factory<Int, Feed>
+    @Query("SELECT * FROM feeds ORDER BY createTime DESC")
+    fun getFeeds(): DataSource.Factory<Int, Feed>
 }

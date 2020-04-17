@@ -24,13 +24,12 @@ class HomeRepository(
 ) : BaseRepository() {
 
     companion object {
-        private const val DATABASE_PAGE_SIZE = 20
         private const val NETWORK_ITEM_SIZE = 20
     }
 
     fun refresh(feedType: String): HomeFeedResult {
         // Get data source factory from the local cache
-        val dataSourceFactory = cache.getFeeds(DATABASE_PAGE_SIZE)
+        val dataSourceFactory = cache.getFeeds()
 
         // every new query creates a new BoundaryCallback
         // The BoundaryCallback will observe when the user reaches to the edges of
@@ -39,7 +38,8 @@ class HomeRepository(
         val networkErrors = boundaryCallback.networkErrors
 
         val config = PagedList.Config.Builder()
-            .setPageSize(DATABASE_PAGE_SIZE)
+            .setPageSize(NETWORK_ITEM_SIZE)
+            .setInitialLoadSizeHint(NETWORK_ITEM_SIZE)
             .build()
 
         // Get the paged list

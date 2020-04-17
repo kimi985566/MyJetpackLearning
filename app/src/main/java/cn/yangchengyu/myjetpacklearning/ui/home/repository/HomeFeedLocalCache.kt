@@ -21,7 +21,7 @@ class HomeFeedLocalCache(private val ioExecutor: Executor) {
         }
     }
 
-    fun getFeeds(limit:Int): DataSource.Factory<Int, Feed> {
-        return CacheDatabase.get().feed.getFeeds(limit)
+    fun getFeeds(): DataSource.Factory<Int, Feed> {
+        return CacheDatabase.get().feed.getFeeds()
     }
 }
