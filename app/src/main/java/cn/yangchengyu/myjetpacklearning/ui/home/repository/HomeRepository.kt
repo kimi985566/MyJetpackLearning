@@ -2,6 +2,7 @@ package cn.yangchengyu.myjetpacklearning.ui.home.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.liveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import cn.yangchengyu.libcommon.model.Feed
@@ -27,7 +28,7 @@ class HomeRepository(
         private const val NETWORK_ITEM_SIZE = 20
     }
 
-    fun refresh(feedType: String): HomeFeedResult {
+    fun refresh(feedType: String): LiveData<HomeFeedResult> = liveData {
         // Get data source factory from the local cache
         val dataSourceFactory = cache.getFeeds()
 
@@ -48,10 +49,7 @@ class HomeRepository(
             .build()
 
         // Get the network errors exposed by the boundary callback
-        return HomeFeedResult(
-            data,
-            networkErrors
-        )
+        emit(HomeFeedResult(data, networkErrors))
     }
 
     inner class HomeFeedBoundaryCallback(private val feedType: String) :
@@ -83,6 +81,10 @@ class HomeRepository(
         override fun onItemAtEndLoaded(itemAtEnd: Feed) {
             LogUtils.i("onItemAtEndLoaded")
             requestAndSaveData(feedType)
+        }
+
+        override fun onItemAtFrontLoaded(itemAtFront: Feed) {
+
         }
 
         private fun requestAndSaveData(feedType: String) {
@@ -117,7 +119,7 @@ class HomeRepository(
             )
         }
 
-        private fun processData(data: HomeFeedData?) {
+        private suspend fun processData(data: HomeFeedData?) {
             data?.data?.filterNotNull()?.let { list ->
                 cache.insertFeeds(list) {
                     if (list.isNotEmpty()) {

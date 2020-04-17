@@ -33,7 +33,7 @@ class HomeFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         homeViewModel =
-            ViewModelProviders.of(this, HomeFeedInjection.provideHomeViewModelFactory(context!!))
+            ViewModelProviders.of(this, HomeFeedInjection.provideHomeViewModelFactory())
                 .get(HomeViewModel::class.java)
 
         initAdapter()

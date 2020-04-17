@@ -6,12 +6,11 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
 import cn.yangchengyu.libcommon.model.Feed;
-import cn.yangchengyu.libcommon.model.HomeFeedData;
 import cn.yangchengyu.libcommon.utils.AppGlobals;
 
 //数据读取、存储时数据转换器,比如将写入时将Date转换成Long存储，读取时把Long转换Date返回
 @TypeConverters(DateConverter.class)
-@Database(entities = {Cache.class, Feed.class}, version = 1)
+@Database(entities = {Cache.class, Feed.class}, version = 1, exportSchema = false)
 public abstract class CacheDatabase extends RoomDatabase {
 
     private static final CacheDatabase DATABASE;

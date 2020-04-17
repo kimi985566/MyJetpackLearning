@@ -16,7 +16,7 @@ import cn.yangchengyu.libcommon.model.Feed
 @Dao
 interface FeedDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertFeeds(posts: List<Feed>?)
+    suspend fun insertFeeds(posts: List<Feed>?)
 
     @Query("SELECT * FROM feeds ORDER BY createTime DESC")
     fun getFeeds(): DataSource.Factory<Int, Feed>

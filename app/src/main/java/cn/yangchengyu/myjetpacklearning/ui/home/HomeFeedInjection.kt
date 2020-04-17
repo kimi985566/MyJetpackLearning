@@ -1,12 +1,10 @@
 package cn.yangchengyu.myjetpacklearning.ui.home
 
-import android.content.Context
 import androidx.lifecycle.ViewModelProvider
 import cn.yangchengyu.libnetwork.RetrofitFactory
 import cn.yangchengyu.myjetpacklearning.ui.home.repository.HomeFeedLocalCache
 import cn.yangchengyu.myjetpacklearning.ui.home.repository.HomeRepository
 import cn.yangchengyu.myjetpacklearning.ui.home.viewmodel.HomeViewModelFactory
-import java.util.concurrent.Executors
 
 /**
  * Desc  :
@@ -15,22 +13,20 @@ import java.util.concurrent.Executors
  */
 object HomeFeedInjection {
 
-    private fun provideCache(context: Context): HomeFeedLocalCache {
-        return HomeFeedLocalCache(
-            Executors.newSingleThreadExecutor()
-        )
+    private fun provideCache(): HomeFeedLocalCache {
+        return HomeFeedLocalCache()
     }
 
-    private fun provideGithubRepository(context: Context): HomeRepository {
+    private fun provideGithubRepository(): HomeRepository {
         return HomeRepository(
             RetrofitFactory.homeService,
-            provideCache(context)
+            provideCache()
         )
     }
 
-    fun provideHomeViewModelFactory(context: Context): ViewModelProvider.Factory {
+    fun provideHomeViewModelFactory(): ViewModelProvider.Factory {
         return HomeViewModelFactory(
-            provideGithubRepository(context)
+            provideGithubRepository()
         )
     }
 }

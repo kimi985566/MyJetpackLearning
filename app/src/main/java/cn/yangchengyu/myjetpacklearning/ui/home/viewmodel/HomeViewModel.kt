@@ -1,19 +1,16 @@
 package cn.yangchengyu.myjetpacklearning.ui.home.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import androidx.paging.PagedList
 import cn.yangchengyu.libcommon.model.Feed
-import cn.yangchengyu.myjetpacklearning.ui.home.repository.HomeRepository
 import cn.yangchengyu.myjetpacklearning.ui.home.repository.HomeFeedResult
+import cn.yangchengyu.myjetpacklearning.ui.home.repository.HomeRepository
 
 class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
 
     //feedType
     private val feedTypeLiveData = MutableLiveData<String>()
-    private val repoResult: LiveData<HomeFeedResult> = Transformations.map(feedTypeLiveData) {
+    private val repoResult: LiveData<HomeFeedResult> = feedTypeLiveData.switchMap {
         repository.refresh(it)
     }
 
