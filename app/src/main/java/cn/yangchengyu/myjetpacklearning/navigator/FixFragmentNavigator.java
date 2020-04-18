@@ -73,15 +73,19 @@ public class FixFragmentNavigator extends FragmentNavigator {
             ft.setCustomAnimations(enterAnim, exitAnim, popEnterAnim, popExitAnim);
         }
 
+        //ft.replace(mContainerId, frag);
+
         List<Fragment> fragments = manager.getFragments();
-        for (Fragment fragment : fragments) {
-            ft.hide(fragment);
+        if (!fragments.isEmpty()) {
+            for (Fragment fragment : fragments) {
+                ft.hide(fragment);
+            }
         }
         if (!frag.isAdded()) {
             ft.add(containerId, frag, tag);
         }
         ft.show(frag);
-        //ft.replace(mContainerId, frag);
+
         ft.setPrimaryNavigationFragment(frag);
 
         final @IdRes int destId = destination.getId();

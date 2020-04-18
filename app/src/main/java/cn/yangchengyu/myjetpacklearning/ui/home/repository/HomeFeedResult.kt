@@ -19,12 +19,17 @@ package cn.yangchengyu.myjetpacklearning.ui.home.repository
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
 import cn.yangchengyu.libcommon.model.Feed
+import cn.yangchengyu.libcommon.model.NetworkState
 
 /**
  * RepoSearchResult from a search, which contains LiveData<List<Repo>> holding query data,
  * and a LiveData<String> of network error state.
  */
 data class HomeFeedResult(
+    // the LiveData of paged lists for the UI to observe
     val data: LiveData<PagedList<Feed>>,
-    val networkErrors: LiveData<String>
+    // represents the network request status to show to the user
+    val networkState: LiveData<NetworkState>,
+    // refreshes the whole data and fetches it from scratch.
+    val refresh: () -> Unit
 )

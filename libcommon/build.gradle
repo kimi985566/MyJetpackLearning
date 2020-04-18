@@ -56,6 +56,7 @@ dependencies {
 
     //约束布局
     api 'androidx.constraintlayout:constraintlayout:1.1.3'
+    api "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 
     //navigation导航
     api 'androidx.navigation:navigation-fragment:2.2.1'

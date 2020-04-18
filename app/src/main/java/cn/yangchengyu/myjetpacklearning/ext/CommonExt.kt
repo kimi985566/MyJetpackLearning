@@ -41,7 +41,7 @@ suspend fun <T> executeResponse(
         if (200 == response.status && response.data != null) {
             successBlock(response.data)
         } else {
-            errorBlock(response.message ?: "")
+            errorBlock(response.message ?: "Network Error")
         }
     }
 }
@@ -57,7 +57,7 @@ fun tryCatchLaunch(
         try {
             tryBlock()
         } catch (e: Exception) {
-            LogUtils.e(this.coroutineContext.javaClass.simpleName + " " + e.toString())
+            e.printStackTrace()
             catchBlock(e)
         }
     }

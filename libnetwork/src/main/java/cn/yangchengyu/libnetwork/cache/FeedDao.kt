@@ -20,4 +20,7 @@ interface FeedDao {
 
     @Query("SELECT * FROM feeds ORDER BY createTime DESC")
     fun getFeeds(): DataSource.Factory<Int, Feed>
+
+    @Query("DELETE FROM feeds")
+    fun deleteAllFeeds()
 }

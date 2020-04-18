@@ -21,4 +21,9 @@ class HomeFeedLocalCache {
     fun getFeeds(): DataSource.Factory<Int, Feed> {
         return CacheDatabase.get().feed.getFeeds()
     }
+
+    fun deleteAllFeeds(deleteFinished: () -> Unit) {
+        CacheDatabase.get().feed.deleteAllFeeds()
+        deleteFinished()
+    }
 }

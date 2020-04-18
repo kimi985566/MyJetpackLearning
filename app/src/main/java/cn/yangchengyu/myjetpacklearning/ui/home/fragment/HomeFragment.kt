@@ -4,10 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
+import cn.yangchengyu.libcommon.model.NetworkState
 import cn.yangchengyu.libnavannotation.FragmentDestination
 import cn.yangchengyu.myjetpacklearning.R
 import cn.yangchengyu.myjetpacklearning.ui.home.HomeFeedInjection
@@ -20,6 +21,8 @@ import kotlinx.android.synthetic.main.fragment_home.*
 class HomeFragment : Fragment() {
 
     private lateinit var homeViewModel: HomeViewModel
+
+    private var adapter: HomeFeedAdapter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,18 +41,25 @@ class HomeFragment : Fragment() {
 
         initAdapter()
 
-        homeViewModel.refreshFeedType("all")
+        homeViewModel.repos.observe(viewLifecycleOwner, Observer {
+            adapter?.submitList(it)
+        })
+
+        homeViewModel.networkState.observe(viewLifecycleOwner, Observer { state ->
+            swipeRefresh.isRefreshing = NetworkState.LOADING == state
+        })
+
+        swipeRefresh?.setColorSchemeResources(R.color.colorPrimary)
+        swipeRefresh?.setSize(CircularProgressDrawable.LARGE)
+        swipeRefresh?.setOnRefreshListener {
+            homeViewModel.refresh()
+        }
+
+        homeViewModel.getFeedType("all")
     }
 
     private fun initAdapter() {
-        list.adapter = HomeFeedAdapter(context!!)
-
-        homeViewModel.repos.observe(viewLifecycleOwner, Observer {
-            (list.adapter as? HomeFeedAdapter)?.submitList(it)
-        })
-
-        homeViewModel.networkErrors.observe(viewLifecycleOwner, Observer {
-            Toast.makeText(context, "\uD83D\uDE28 Wooops $it", Toast.LENGTH_LONG).show()
-        })
+        adapter = HomeFeedAdapter(context!!)
+        list.adapter = adapter
     }
 }

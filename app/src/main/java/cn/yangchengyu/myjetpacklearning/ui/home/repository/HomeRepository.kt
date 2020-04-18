@@ -7,6 +7,7 @@ import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import cn.yangchengyu.libcommon.model.Feed
 import cn.yangchengyu.libcommon.model.HomeFeedData
+import cn.yangchengyu.libcommon.model.NetworkState
 import cn.yangchengyu.libnetwork.repository.BaseRepository
 import cn.yangchengyu.libnetwork.services.HomeService
 import cn.yangchengyu.myjetpacklearning.ext.executeResponse
@@ -28,6 +29,9 @@ class HomeRepository(
         private const val NETWORK_ITEM_SIZE = 20
     }
 
+    // keep the last requested page. When the request is successful, increment the page number.
+    private var lastKey = 0
+
     fun refresh(feedType: String): LiveData<HomeFeedResult> = liveData {
         // Get data source factory from the local cache
         val dataSourceFactory = cache.getFeeds()
@@ -36,7 +40,7 @@ class HomeRepository(
         // The BoundaryCallback will observe when the user reaches to the edges of
         // the list and update the database with extra data
         val boundaryCallback = HomeFeedBoundaryCallback(feedType)
-        val networkErrors = boundaryCallback.networkErrors
+        val networkState = boundaryCallback.networkState
 
         val config = PagedList.Config.Builder()
             .setPageSize(NETWORK_ITEM_SIZE)
@@ -49,20 +53,27 @@ class HomeRepository(
             .build()
 
         // Get the network errors exposed by the boundary callback
-        emit(HomeFeedResult(data, networkErrors))
+        emit(
+            HomeFeedResult(
+                data = data,
+                networkState = networkState,
+                refresh = {
+                    cache.deleteAllFeeds {
+                        //delete all data and get data from 0
+                        lastKey = 0
+                    }
+                }
+            )
+        )
     }
 
     inner class HomeFeedBoundaryCallback(private val feedType: String) :
         PagedList.BoundaryCallback<Feed>() {
 
-        // keep the last requested page. When the request is successful, increment the page number.
-        private var lastKey = 0
+        private val _networkState = MutableLiveData<NetworkState>()
 
-        private val _networkErrors = MutableLiveData<String>()
-
-        // LiveData of network errors.
-        val networkErrors: LiveData<String>
-            get() = _networkErrors
+        val networkState: LiveData<NetworkState>
+            get() = _networkState
 
         // avoid triggering multiple requests in the same time
         private var isRequestInProgress = false
@@ -90,6 +101,7 @@ class HomeRepository(
         private fun requestAndSaveData(feedType: String) {
             if (isRequestInProgress) return
 
+            _networkState.postValue(NetworkState.LOADING)
             isRequestInProgress = true
 
             tryCatchLaunch(
@@ -105,16 +117,17 @@ class HomeRepository(
                         },
                         successBlock = { data ->
                             processData(data)
+                            _networkState.postValue(NetworkState.LOADED)
                         },
                         errorBlock = { errorMsg ->
-                            _networkErrors.postValue(errorMsg)
                             isRequestInProgress = false
+                            _networkState.postValue(NetworkState.error(errorMsg))
                         }
                     )
                 },
                 catchBlock = { exception ->
-                    _networkErrors.postValue(exception.message)
                     isRequestInProgress = false
+                    _networkState.postValue(NetworkState.error(exception.message))
                 }
             )
         }
