@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import cn.yangchengyu.libcommon.model.NetworkState
 import cn.yangchengyu.libnavannotation.FragmentDestination
 import cn.yangchengyu.myjetpacklearning.R
@@ -50,7 +49,6 @@ class HomeFragment : Fragment() {
         })
 
         swipeRefresh?.setColorSchemeResources(R.color.colorPrimary)
-        swipeRefresh?.setSize(CircularProgressDrawable.LARGE)
         swipeRefresh?.setOnRefreshListener {
             homeViewModel.refresh()
         }

@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
  * Author: Chengyu Yang
  * Date  : 2020/4/12
  */
-public abstract class AbsPagedListAdapter<T, VH extends RecyclerView.ViewHolder> extends PagedListAdapter<T, VH> {
+public abstract class AbstractPagedListAdapter<T, VH extends RecyclerView.ViewHolder> extends PagedListAdapter<T, VH> {
 
     private SparseArray<View> mHeaders = new SparseArray<>();
     private SparseArray<View> mFooters = new SparseArray<>();
@@ -23,10 +23,13 @@ public abstract class AbsPagedListAdapter<T, VH extends RecyclerView.ViewHolder>
     private int baseItemTypeHeader = 100000;
     private int baseItemTypeFooter = 200000;
 
-    protected AbsPagedListAdapter(@NonNull DiffUtil.ItemCallback<T> diffCallback) {
+    protected AbstractPagedListAdapter(@NonNull DiffUtil.ItemCallback<T> diffCallback) {
         super(diffCallback);
     }
 
+    /**
+     * 添加HeaderView
+     */
     public void addHeaderView(View view) {
         //判断给View对象是否还没有处在mHeaders数组里面
         if (mHeaders.indexOfValue(view) < 0) {
@@ -35,6 +38,9 @@ public abstract class AbsPagedListAdapter<T, VH extends RecyclerView.ViewHolder>
         }
     }
 
+    /**
+     * 添加FooterView
+     */
     public void addFooterView(View view) {
         //判断给View对象是否还没有处在mFooters数组里面
         if (mFooters.indexOfValue(view) < 0) {
@@ -43,7 +49,9 @@ public abstract class AbsPagedListAdapter<T, VH extends RecyclerView.ViewHolder>
         }
     }
 
-    // 移除头部
+    /**
+     * 移除头部
+     */
     public void removeHeaderView(View view) {
         int index = mHeaders.indexOfValue(view);
         if (index < 0) {
@@ -53,7 +61,9 @@ public abstract class AbsPagedListAdapter<T, VH extends RecyclerView.ViewHolder>
         notifyDataSetChanged();
     }
 
-    // 移除底部
+    /**
+     * 移除底部
+     */
     public void removeFooterView(View view) {
         int index = mFooters.indexOfValue(view);
         if (index < 0) {
@@ -93,7 +103,9 @@ public abstract class AbsPagedListAdapter<T, VH extends RecyclerView.ViewHolder>
             position = position - getOriginalItemCount() - mHeaders.size();
             return mFooters.keyAt(position);
         }
+
         position = position - mHeaders.size();
+
         return getItemViewType2(position);
     }
 

@@ -17,16 +17,22 @@ import cn.yangchengyu.myjetpacklearning.databinding.LayoutFeedTypeVideoBinding
 class ViewHolderForHomeFeed(itemView: View, private val binding: ViewDataBinding) :
     RecyclerView.ViewHolder(itemView) {
 
-    fun bindData(item: Feed) {
+    fun bindData(item: Feed?) {
         binding.setVariable(BR.feed, item)
         when (binding) {
             is LayoutFeedTypeImageBinding -> {
                 //绑定图片
-                binding.feedImage.bindData(item.width, item.height, 16, item.cover)
+                binding.feedImage.bindData(
+                    item?.width ?: 0, item?.height ?: 0,
+                    16, item?.cover ?: ""
+                )
             }
             is LayoutFeedTypeVideoBinding -> {
                 //绑定视频区域
-                binding.listPlayerView.bindData(item.width, item.height, item.cover, item.url)
+                binding.listPlayerView.bindData(
+                    item?.width ?: 0, item?.height ?: 0,
+                    item?.cover ?: "", item?.url ?: ""
+                )
             }
         }
     }
