@@ -21,6 +21,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+
+        <!--这是是QQ快捷登录SDK 里面包含但没用的 apache的类，需要在这里通过uses-library去除掉 -->
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
+        <!--主页面-->
         <activity
             android:name=".MainActivity"
             android:colorMode="wideColorGamut"
@@ -32,7 +39,32 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.publish.CaptureActivity" />
+        <!--登陆页-->
+        <activity
+            android:name=".ui.Login.LoginActivity"
+            android:colorMode="wideColorGamut" />
+
+        <!--注册SDKActivity 开始-->
+        <activity
+            android:name="com.tencent.tauth.AuthActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="tencent1105739457" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="com.tencent.connect.common.AssistActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="behind"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <!--注册SDKActivity 结束-->
 
     </application>
 

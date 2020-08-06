@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import cn.yangchengyu.libcommon.model.NetworkState
@@ -50,7 +50,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun initViewModel() {
-        homeViewModel = ViewModelProviders.of(this, HomeFeedInjection.provideHomeViewModelFactory())
+        homeViewModel = ViewModelProvider(this, HomeFeedInjection.provideHomeViewModelFactory())
             .get(HomeViewModel::class.java)
 
         //刷新数据

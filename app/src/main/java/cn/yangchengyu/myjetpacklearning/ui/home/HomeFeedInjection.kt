@@ -17,7 +17,7 @@ object HomeFeedInjection {
         return HomeFeedLocalCache()
     }
 
-    private fun provideGithubRepository(): HomeRepository {
+    private fun provideHomeRepository(): HomeRepository {
         return HomeRepository(
             RetrofitFactory.homeService,
             provideCache()
@@ -26,7 +26,7 @@ object HomeFeedInjection {
 
     fun provideHomeViewModelFactory(): ViewModelProvider.Factory {
         return HomeViewModelFactory(
-            provideGithubRepository()
+            provideHomeRepository()
         )
     }
 }

@@ -48,7 +48,11 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    //leakcanary
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
 
+    //QQ快捷登录
+    implementation files('libs/open_sdk_r8353806_lite.jar')
     //注解
     implementation project(':libnavannotation')
     //注解compiler

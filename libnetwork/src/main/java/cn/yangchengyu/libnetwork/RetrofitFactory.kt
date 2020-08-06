@@ -4,6 +4,7 @@ import cn.yangchengyu.libcommon.utils.AppGlobals
 import cn.yangchengyu.libnetwork.common.NetworkBaseContent
 import cn.yangchengyu.libnetwork.intercepter.CustomCacheInterceptor
 import cn.yangchengyu.libnetwork.services.HomeService
+import cn.yangchengyu.libnetwork.services.LoginService
 import cn.yangchengyu.libnetwork.utils.SSLContextSecurity
 import com.blankj.utilcode.util.LogUtils
 import com.franmontiel.persistentcookiejar.PersistentCookieJar
@@ -40,6 +41,11 @@ object RetrofitFactory {
     //首页服务
     val homeService by lazy {
         create(HomeService::class.java)
+    }
+
+    //登陆服务
+    val loginService by lazy {
+        create(LoginService::class.java)
     }
 
     init {
